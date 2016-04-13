@@ -56,6 +56,7 @@ double last_lat, last_lon;
 unsigned long trip = 0L;
 bool have_first_fix = false;
 int mindist = 10;		// minimum distance in meters before 't'
+unsigned long meters_since_pub;
 
 static char deviceID[8 + 1];		// name of this device
 static char pubtopic[128];
@@ -286,11 +287,19 @@ void loop()
 				last_lat, last_lon
 				);
 
-			if (meters >= mindist) {
+			meters_since_pub += meters;
+
+			Serial.print("METERS=");
+			Serial.print(meters);
+			Serial.print(" SincePub=");
+			Serial.println(meters_since_pub);
+
+			if (meters_since_pub >= mindist) {
 				serialize(gps, 'v');
-				last_lat = gps.location.lat();
-				last_lon = gps.location.lng();
+				meters_since_pub = 0;
 			}
+			last_lat = gps.location.lat();
+			last_lon = gps.location.lng();
 		}
 
 	} else {
