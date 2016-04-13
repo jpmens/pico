@@ -356,7 +356,7 @@ void unload_store()
 
 	/* If we reach this, we ought to be able to remove the store */
 
-	SPIFFS.remove(STORE);
+	// SPIFFS.remove(STORE);
 }
 
 static void serialize(TinyGPSPlus &gps, char t)
