@@ -130,6 +130,8 @@ void callback(char* topic, byte* payload, unsigned int length)
 {
 
 	// FIXME: handle cmd/ mindist
+	// FIXME: handle cmd/list 	(list files)
+	// FIXME: handle cmd/dump	(dump cache)
 #if 0
   Serial.print("Message arrived [");
   Serial.print(topic);
