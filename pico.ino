@@ -5,7 +5,7 @@
 #include <TimeLib.h>
 #include <SoftwareSerial.h>
 
-#include "wifi.h"
+#include "pico.h"
 
 const char* ssid = WIFISSID;
 const char* password = WIFIPASSWORD;
