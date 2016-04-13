@@ -36,6 +36,7 @@ const int mqtt_port = MQTTPORT;
 # include <ArduinoJson.h>
 #endif
 
+#define LED_ALIVE	D5
 #define RXpin	D2
 #define TXpin	D1
 
@@ -194,6 +195,7 @@ void setup()
 	ESP.wdtEnable(WDTO_8S);
 	Serial.begin(115200);
 	nss.begin(9600);
+	pinMode(LED_ALIVE, OUTPUT);
 
 	fs_prepare();
 	fs_show();
@@ -216,11 +218,15 @@ void setup()
 
 void loop()
 {
+	digitalWrite(LED_ALIVE, HIGH);
+	smartdelay(50);
+
 	while (nss.available() > 0) {
 		gps.encode(nss.read());
 		// ESP.wdtFeed();
 		yield();
 	}
+
 
 	is_online = check_online();
 
@@ -290,6 +296,7 @@ void loop()
 		Serial.println("invalid location");
 	}
 
+	digitalWrite(LED_ALIVE, LOW);
 	smartdelay(5000);
 }
 
