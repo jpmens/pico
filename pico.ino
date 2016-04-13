@@ -273,10 +273,9 @@ void loop()
 		if (!have_first_fix) {
 			serialize(gps, 'f');
 			have_first_fix = true;
-		} else {
 			last_lat = gps.location.lat();
 			last_lon = gps.location.lng();
-
+		} else {
 			if (now - pingInterval >= PINGINTERVAL) {
 				serialize(gps, 'p');
 				pingInterval = millis();
@@ -289,6 +288,8 @@ void loop()
 
 			if (meters >= mindist) {
 				serialize(gps, 'v');
+				last_lat = gps.location.lat();
+				last_lon = gps.location.lng();
 			}
 		}
 
