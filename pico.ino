@@ -368,7 +368,7 @@ void unload_store()
 
 	/* If we reach this, we ought to be able to remove the store */
 
-	// SPIFFS.remove(STORE);
+	SPIFFS.remove(STORE);
 }
 
 static void serialize(TinyGPSPlus &gps, char t)
@@ -414,7 +414,8 @@ static void serialize(TinyGPSPlus &gps, char t)
 #else /* not JSON */
 # define MILL 1000000.0
 
-	snprintf(payload, sizeof(payload), "%s,%X,%c,%ld,%ld,%d,%d,%d,%u,%d",
+	unsigned int km_trip = (trip + 500) / 1000;
+	snprintf(payload, sizeof(payload), "%s,%X,%c,%ld,%ld,%d,%d,%d,%u,%u",
 		deviceID + strlen(deviceID) - 2,	// TID
 		now(),					// tst in HEX
 		t,					// t
@@ -424,7 +425,7 @@ static void serialize(TinyGPSPlus &gps, char t)
 		int(gps.speed.kmph()),			// vel
 		int(gps.altitude.meters() / 10),	// alt
 		meters,					// dist in meters
-		((trip + 500) / 1000));			// trip in km
+		km_trip);				// trip in km
 #endif
 
 	Serial.print("Status: ");
