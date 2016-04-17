@@ -132,24 +132,10 @@ void callback(char* topic, byte* payload, unsigned int length)
 	// FIXME: handle cmd/ mindist
 	// FIXME: handle cmd/list 	(list files)
 	// FIXME: handle cmd/dump	(dump cache)
-#if 0
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
 
-  // Switch on the LED if an 1 was received as first character
-  if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is acive low on the ESP-01)
-  } else {
-    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
-  }
-#endif
+	Serial.print("Message arrived [");
+	Serial.print(topic);
+	Serial.print("] ");
 }
 
 bool MQTT_reconnect()
@@ -172,10 +158,9 @@ bool MQTT_reconnect()
 	if (client.connect(clientID, username, password, willTopic, MQTTQOS1, willRetain, willPayload)) {
 		Serial.println("Connected to MQTT");
 		// Once connected, publish an announcement...
-		client.publish(pubtopic, "hello there!");
-	      // ... and resubscribe
-	      client.subscribe(subtopic);
-	      mqtt_connected = true;
+		client.publish(pubtopic, "hola!");
+		client.subscribe(subtopic);
+		mqtt_connected = true;
 	} else {
 		Serial.println("NOT connected to MQTT");
 	}
@@ -211,12 +196,8 @@ void setup()
 	snprintf(pubtopic, sizeof(pubtopic), "%s/%s", BASETOPIC, deviceID);
 	snprintf(subtopic, sizeof(subtopic), "%s/%s/cmd", BASETOPIC, deviceID);
 
-	// setup_wifi();
-
 	client.setServer(mqtt_server, mqtt_port);
 	client.setCallback(callback);
-
-	// MQTT_reconnect();
 }
 
 void loop()
