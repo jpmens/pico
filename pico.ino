@@ -229,7 +229,7 @@ void loop()
 		}
 	}
 
-	if (gps.location.isValid()) {
+	if (gps.location.isValid() && gps.location.age() < 2000) {
 		if (counter % 10 == 0) {
 			gpstime_set(gps);
 		}
@@ -238,6 +238,8 @@ void loop()
 		Serial.print(gps.location.age());
 		Serial.print(" lat=");
 		Serial.println(gps.location.lat());
+		Serial.print(" lon=");
+		Serial.println(gps.location.lng());
 
 		Serial.print(" Y=");
 		Serial.print(gps.date.year()); // Year (2000+) (u16)
