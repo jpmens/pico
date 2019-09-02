@@ -357,7 +357,7 @@ void unload_store()
 static void serialize(TinyGPSPlus &gps, char t)
 {
 #ifdef JSON
-	StaticJsonBuffer<500> jsonBuffer;
+	DynamicJsonDocument doc(1024);
 #endif
 	char payload[1025];
 	boolean rc;
@@ -376,24 +376,23 @@ static void serialize(TinyGPSPlus &gps, char t)
 	trip += meters;
 
 #ifdef JSON
-	JsonObject& root = jsonBuffer.createObject();
 	char t_str[2] = { t, 0 };
 
-	root["_type"] = "location";
+	  doc["_type"] = "location";
 
-	root.set("n",		counter);
-	root.set("lat",	double_with_n_digits(gps.location.lat(), 6));
-	root.set("lon",	double_with_n_digits(gps.location.lng(), 6));
-	// root.set("alt",	int(gps.altitude.meters()));
-	// root.set("vel",	int(gps.speed.kmph()));
-	// root.set("cog",	int(gps.course.deg()));
-	// root.set("nsat",	gps.satellites.value());
-	root.set<long>("tst",	now());
-	root.set("tid",		deviceID + strlen(deviceID) - 2); // last 2 chars
-	root.set("t",		t);
+	  doc["n"] = counter;
+	  doc["lat"] = gps.location.lat();
+	  doc["lon"] = gps.location.lng();
+	  // doc["alt"] = int(gps.altitude.meters());
+	  // doc["vel"] = int(gps.speed.kmph());
+	  // doc["cog"] = int(gps.course.deg());
+	  // doc["nsat"] = gps.satellites.value();
+	  doc["tst"] = now();
+	  doc["tid"] = deviceID + strlen(deviceID) - 2; // last 2 chars
+	  doc["t"] = t;
 
 
-	root.printTo(payload, sizeof(payload));
+	  serializeJson(doc, payload);
 #else /* not JSON */
 # define MILL 1000000.0
 
